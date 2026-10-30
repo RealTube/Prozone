@@ -3,6 +3,10 @@
   <url><loc>https://www.prozone.am/</loc><priority>1.0</priority></url>
   <url><loc>https://www.prozone.am/chillers</loc><priority>0.9</priority></url>
   <url><loc>https://www.prozone.am/services</loc><priority>0.8</priority></url>
+  <url><loc>https://www.prozone.am/cooling</loc><priority>0.8</priority></url>
+  <url><loc>https://www.prozone.am/heating</loc><priority>0.8</priority></url>
+  <url><loc>https://www.prozone.am/ventilation</loc><priority>0.8</priority></url>
+  <url><loc>https://www.prozone.am/controls</loc><priority>0.8</priority></url>
   <url><loc>https://www.prozone.am/projects</loc><priority>0.7</priority></url>
   <url><loc>https://www.prozone.am/contact</loc><priority>0.8</priority></url>
 </urlset>
