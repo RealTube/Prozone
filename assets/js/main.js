@@ -130,10 +130,14 @@
         if (!heroVisible || document.hidden || Date.now() < resumeAt) return;
         setSeason(current === 'summer' ? 'winter' : 'summer');
       }, 5600);
-      // Inside temperature: tiny live wobble around the set point
+      // Inside temperature: drifts a step at a time between 23.5 and 24.1, as if the controller is calibrating
+      var inNow = SP * 10, IN_LO = 235, IN_HI = 241;
       setInterval(function () {
         if (!heroVisible || document.hidden) return;
-        inEl.textContent = (SP + Math.round((Math.random() - .5) * 2) / 10).toFixed(1);
+        var step = Math.random() < .5 ? -1 : 1;
+        if (Math.random() < .3) step += Math.sign(SP * 10 - inNow);
+        inNow = Math.max(IN_LO, Math.min(IN_HI, inNow + step));
+        inEl.textContent = (inNow / 10).toFixed(1);
       }, 1700);
     };
   }
