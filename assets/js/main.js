@@ -151,7 +151,7 @@
     $$('[data-count]').forEach(function (el) { cio.observe(el); });
   }
 
-  /* ---------- Chiller: step list ---------- */
+  /* ---------- Take-apart scene: step list ---------- */
   var xp = $('.xp'), xpSteps = $$('.xp__steps li'), xpBar = $('.xp__progress span');
   function setStep(n) {
     if (!xp) return;
@@ -269,9 +269,9 @@
      Motion layer (GSAP + ScrollTrigger)
      ====================================================================== */
   if (!motion) {
-    // Static fallback: show the chiller fully taken apart, with every step visible
+    // Static fallback: show the machine fully taken apart, with every step visible
     if (xp) xp.classList.add('xp--static');
-    if (window.PZChiller) window.PZChiller.render(1);
+    if (window.PZXp) window.PZXp.render(1);
     startDial();
     window.__pzReady = true;
     return;
@@ -381,8 +381,8 @@
     });
   }
 
-  // Chiller: pinned, taken apart as you scroll
-  if (window.PZChiller) {
+  // Take-apart scene: pinned, the machine comes apart as you scroll
+  if (window.PZXp) {
     xp.classList.add('xp--pinned');
     setStep(0);
     var xpState = { p: 0 };
@@ -394,7 +394,7 @@
         scrub: .8, invalidateOnRefresh: true
       },
       onUpdate: function () {
-        setStep(window.PZChiller.render(xpState.p));
+        setStep(window.PZXp.render(xpState.p));
         if (xpBar) xpBar.style.transform = 'scaleX(' + xpState.p.toFixed(3) + ')';
       }
     });
@@ -444,7 +444,7 @@
   }
 
   function refresh() {
-    if (window.PZChiller) window.PZChiller.fit();
+    if (window.PZXp) window.PZXp.fit();
     ScrollTrigger.refresh();
     revealInView();
   }
