@@ -50,7 +50,7 @@
   var hero = $('.hero'), dial = $('[data-dial]');
   var startDial = function () {};
   if (dial) {
-    var MIN = -20, MAX = 45, SP = 22, R = 118, CX = 160, CY = 160;
+    var MIN = -20, MAX = 45, SP = 24, R = 118, CX = 160, CY = 160;
     var C = 2 * Math.PI * R, ARC = C * .75, NS = 'http://www.w3.org/2000/svg';
     var frac = function (t) { return (Math.max(MIN, Math.min(MAX, t)) - MIN) / (MAX - MIN); };
     var ang = function (t) { return (135 + frac(t) * 270) * Math.PI / 180; };
