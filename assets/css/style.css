@@ -38,7 +38,7 @@
   --radius: 8px;
   --gutter: clamp(16px, 4vw, 48px);
   --maxw: 1320px;
-  --hdr-h: 82px;
+  --hdr-h: 92px;
   --ease: cubic-bezier(.2, .7, .1, 1);
 }
 
@@ -190,13 +190,13 @@ p { text-wrap: pretty; }
 }
 .hdr__bar {
   display: flex; align-items: center; justify-content: space-between; gap: 18px;
-  height: 78px; transition: height .3s var(--ease);
+  height: 88px; transition: height .3s var(--ease);
 }
-.hdr.is-scrolled .hdr__bar { height: 66px; }
+.hdr.is-scrolled .hdr__bar { height: 76px; }
 .hdr__stripe { height: 4px; background: linear-gradient(100deg, var(--red-hi) 0 50%, var(--blue) 50% 100%); }
 .hdr__logo { flex-shrink: 0; }
-.hdr__logo img { height: 56px; width: auto; transition: height .3s var(--ease); }
-.hdr.is-scrolled .hdr__logo img { height: 46px; }
+.hdr__logo img { height: 66px; width: auto; transition: height .3s var(--ease); }
+.hdr.is-scrolled .hdr__logo img { height: 56px; }
 .hdr__nav { display: flex; gap: 2px; }
 .hdr__nav a {
   position: relative; padding: 10px 12px;
@@ -231,7 +231,7 @@ p { text-wrap: pretty; }
 .mnav__lang { margin: 10px 0 2px; }
 .mnav__lang a { font-size: .9rem; padding: 8px 12px; }
 
-@media (max-width: 1240px) {
+@media (max-width: 1300px) {
   .hdr__nav { display: none; }
   .hdr__menu { display: grid; }
 }
@@ -802,7 +802,7 @@ p { text-wrap: pretty; }
 :lang(ru) .xp .h2 { font-size: clamp(1.6rem, 2.9vw, 2.8rem); }
 :lang(hy) .ind__rows { font-size: clamp(2rem, 5.2vw, 5rem); }
 :lang(ru) .ind__rows { font-size: clamp(2.2rem, 6vw, 6rem); }
-:lang(hy) .hdr__nav a { font-size: .9rem; padding-inline: 7px; letter-spacing: .01em; }
+:lang(hy) .hdr__nav a { font-size: .9rem; padding-inline: 6px; letter-spacing: .01em; }
 /* Armenian menu words are long: switch to the burger menu earlier so the logo never gets squeezed */
 @media (max-width: 1340px) {
   :lang(hy) .hdr__nav { display: none; }
