@@ -194,12 +194,13 @@ p { text-wrap: pretty; }
 }
 .hdr.is-scrolled .hdr__bar { height: 66px; }
 .hdr__stripe { height: 4px; background: linear-gradient(100deg, var(--red-hi) 0 50%, var(--blue) 50% 100%); }
+.hdr__logo { flex-shrink: 0; }
 .hdr__logo img { height: 56px; width: auto; transition: height .3s var(--ease); }
 .hdr.is-scrolled .hdr__logo img { height: 46px; }
 .hdr__nav { display: flex; gap: 2px; }
 .hdr__nav a {
   position: relative; padding: 10px 12px;
-  font-family: var(--f-display); font-weight: 800; font-style: italic; font-size: .9rem;
+  font-family: var(--f-display); font-weight: 800; font-style: italic; font-size: 1.05rem;
   letter-spacing: .03em; text-transform: uppercase; color: var(--blue);
 }
 .hdr__nav a::after {
@@ -801,8 +802,21 @@ p { text-wrap: pretty; }
 :lang(ru) .xp .h2 { font-size: clamp(1.6rem, 2.9vw, 2.8rem); }
 :lang(hy) .ind__rows { font-size: clamp(2rem, 5.2vw, 5rem); }
 :lang(ru) .ind__rows { font-size: clamp(2.2rem, 6vw, 6rem); }
-:lang(hy) .hdr__nav a { font-size: .78rem; padding-inline: 9px; }
-:lang(ru) .hdr__nav a { font-size: .84rem; padding-inline: 10px; }
+:lang(hy) .hdr__nav a { font-size: .9rem; padding-inline: 7px; letter-spacing: .01em; }
+/* Armenian menu words are long: switch to the burger menu earlier so the logo never gets squeezed */
+@media (max-width: 1340px) {
+  :lang(hy) .hdr__nav { display: none; }
+  :lang(hy) .hdr__menu { display: grid; }
+}
+/* "Զանգահարել" is longer than the other languages' call labels: keep the burger on screen on narrow phones */
+@media (max-width: 680px) {
+  :lang(hy) .hdr__call { padding: 12px 12px; font-size: .8rem; gap: .45em; }
+}
+@media (max-width: 380px) {
+  :lang(hy) .hdr__logo img, :lang(hy) .hdr.is-scrolled .hdr__logo img { height: 30px; }
+  :lang(hy) .hdr__call { padding-inline: 10px; font-size: .74rem; }
+}
+:lang(ru) .hdr__nav a { font-size: .98rem; padding-inline: 10px; }
 :lang(hy) .svc h3, :lang(hy) .offer h3 { font-size: 1.15rem; }
 /* "Օդափոխություն" is one long word: shrink it to the card's width instead of breaking it */
 .svc { container-type: inline-size; }
