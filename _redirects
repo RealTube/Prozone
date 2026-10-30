@@ -1,0 +1,15 @@
+# Old prozone.am (Ucraft) addresses → new pages. Works on Netlify and Cloudflare Pages.
+/contacts                         /contact                 301
+/gallery                          /projects                301
+/rooftop-package-units            /services#rooftop        301
+/ducted-air-conditioners          /services#vrf            301
+/ductless-split-air-conditioner   /services#split          301
+/boilers                          /services#boilers        301
+/heat-pumps                       /services#heat-pumps     301
+/gas-furnaces                     /services#furnaces       301
+/bms-building-management-systems  /services#bms            301
+/ahu-air-handling-units           /services#ahu            301
+/fan-coils                        /services#fan-coils      301
+/exhaust-fans                     /services#exhaust        301
+/hy                               /?lang=hy                301
+/hy/*                             /?lang=hy                301

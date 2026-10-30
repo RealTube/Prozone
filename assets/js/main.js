@@ -154,6 +154,7 @@
   /* ---------- Chiller: step list ---------- */
   var xp = $('.xp'), xpSteps = $$('.xp__steps li'), xpBar = $('.xp__progress span');
   function setStep(n) {
+    if (!xp) return;
     xp.setAttribute('data-step', n);
     xpSteps.forEach(function (li) { li.classList.toggle('is-on', +li.dataset.step === n); });
   }
@@ -174,6 +175,7 @@
         if (show) shown.push(s);
       });
       if (motion) {
+        shown.forEach(function (s) { s._pzShown = true; });
         gsap.fromTo(shown, { opacity: 0, y: 24, clipPath: 'inset(0% 0% 0% 0%)' },
           { opacity: 1, y: 0, duration: .6, stagger: .05, ease: 'power3.out', overwrite: true });
         ScrollTrigger.refresh();
@@ -222,7 +224,7 @@
 
   /* ---------- Call-back form (opens the visitor's email app) ---------- */
   var form = $('#qform');
-  form.addEventListener('submit', function (e) {
+  if (form) form.addEventListener('submit', function (e) {
     e.preventDefault();
     if (!form.reportValidity()) return;
     var d = new FormData(form);
@@ -238,6 +240,25 @@
     window.location.href = 'mailto:info@prozone.am?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
   });
 
+  /* ---------- Services page: highlight the category in view ---------- */
+  var catLinks = $$('.svcp__nav a');
+  if (catLinks.length && 'IntersectionObserver' in window) {
+    var cats = catLinks.map(function (a) { return $(a.getAttribute('href')); }).filter(Boolean);
+    var catIO = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        catLinks.forEach(function (a) {
+          var on = a.getAttribute('href') === '#' + e.target.id;
+          if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+          if (on && a.parentNode.scrollWidth > a.parentNode.clientWidth) {
+            a.parentNode.scrollTo({ left: a.offsetLeft - 16, behavior: reduce ? 'auto' : 'smooth' });
+          }
+        });
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+    cats.forEach(function (c) { catIO.observe(c); });
+  }
+
   /* ---------- Mobile bar: step aside while the big phone number is on screen ---------- */
   var mbar = $('.mbar'), bigphone = $('.bigphone');
   if (mbar && bigphone && 'IntersectionObserver' in window) {
@@ -249,7 +270,7 @@
      ====================================================================== */
   if (!motion) {
     // Static fallback: show the chiller fully taken apart, with every step visible
-    xp.classList.add('xp--static');
+    if (xp) xp.classList.add('xp--static');
     if (window.PZChiller) window.PZChiller.render(1);
     startDial();
     window.__pzReady = true;
@@ -280,43 +301,55 @@
     return $$('.wi', el);
   }
 
+  // Each element is revealed once — by its ScrollTrigger, or by revealInView() when
+  // the page opens already scrolled (e.g. services.html#boilers).
+  function fresh(list) { return list.filter(function (el) { if (el._pzShown) return false; el._pzShown = true; return true; }); }
+  function showSplit(el) { if (fresh([el]).length) gsap.to($$('.wi', el), { yPercent: 0, duration: 1.1, ease: 'power4.out', stagger: .05 }); }
+  function showReveal(list) { list = fresh(list); if (list.length) gsap.to(list, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: .1, overwrite: true }); }
+  function showShots(list) {
+    list = fresh(list);
+    if (list.length) gsap.fromTo(list, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.15, ease: 'power4.out', stagger: .08 });
+  }
+  function revealInView() {
+    var vh = window.innerHeight;
+    var inView = function (el, k) { var r = el.getBoundingClientRect(); return !el.hidden && r.top < vh * k && r.bottom > 0; };
+    $$('[data-split]').forEach(function (el) { if (inView(el, .86)) showSplit(el); });
+    showReveal($$('[data-reveal]').filter(function (el) { return inView(el, .88); }));
+    showShots($$('.shot').filter(function (el) { return inView(el, .92); }));
+  }
+
   $$('[data-split]').forEach(function (el) {
     var words = splitWords(el);
     el.classList.add('is-split');
     gsap.set(words, { yPercent: 108 });
     el.style.visibility = 'visible';
-    gsap.to(words, {
-      yPercent: 0, duration: 1.1, ease: 'power4.out', stagger: .05,
-      scrollTrigger: { trigger: el, start: 'top 86%' }
-    });
+    ScrollTrigger.create({ trigger: el, start: 'top 86%', once: true, onEnter: function () { showSplit(el); } });
   });
 
   // Intro
   var intro = gsap.timeline({ defaults: { ease: 'power4.out' } });
-  intro
-    .to('.hdr', { opacity: 1, y: 0, duration: .9 })
-    .to('.hero .line > span', { y: 0, duration: 1.25, stagger: .13 }, .1)
-    .to('[data-hero-fade]', { opacity: 1, y: 0, duration: 1, stagger: .1 }, .45)
-    .to('.dial', { opacity: 1, y: 0, scale: 1, duration: 1.3 }, .55)
-    .add(startDial, .9);
+  intro.to('.hdr', { opacity: 1, y: 0, duration: .9 });
+  if ($('.hero .line > span')) intro.to('.hero .line > span', { y: 0, duration: 1.25, stagger: .13 }, .1);
+  if ($('[data-hero-fade]')) intro.to('[data-hero-fade]', { opacity: 1, y: 0, duration: 1, stagger: .1 }, .45);
+  if (dial) intro.to('.dial', { opacity: 1, y: 0, scale: 1, duration: 1.3 }, .55);
+  intro.add(startDial, .9);
 
   // Hero: photo drifts, content eases away as you scroll past
-  gsap.to('.hero__media img', {
-    yPercent: 10, ease: 'none',
-    scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
+  $$('.hero__media img').forEach(function (img) {
+    gsap.to(img, {
+      yPercent: 10, ease: 'none',
+      scrollTrigger: { trigger: img.closest('section'), start: 'top top', end: 'bottom top', scrub: true }
+    });
   });
-  gsap.to('.hero__inner', {
-    yPercent: -12, opacity: .25, ease: 'none',
-    scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
-  });
+  if ($('.hero__inner')) {
+    gsap.to('.hero__inner', {
+      yPercent: -12, opacity: .25, ease: 'none',
+      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
+    });
+  }
 
   // Generic reveals, batched so neighbours stagger
-  ScrollTrigger.batch('[data-reveal]', {
-    start: 'top 88%',
-    onEnter: function (batch) {
-      gsap.to(batch, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: .1, overwrite: true });
-    }
-  });
+  ScrollTrigger.batch('[data-reveal]', { start: 'top 88%', onEnter: showReveal });
 
   // Brand marquee — speeds up with scroll velocity
   var track = $('.marquee__track');
@@ -368,16 +401,10 @@
   }
 
   // Gallery: photos wipe in from below
-  ScrollTrigger.batch('.shot', {
-    start: 'top 92%',
-    onEnter: function (batch) {
-      gsap.fromTo(batch, { clipPath: 'inset(100% 0% 0% 0%)' },
-        { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.15, ease: 'power4.out', stagger: .08 });
-    }
-  });
+  ScrollTrigger.batch('.shot', { start: 'top 92%', onEnter: showShots });
 
   // Industries: two rows slide in opposite directions with scroll
-  $$('.ind__row').forEach(function (row, i) {
+  if ($('.ind')) $$('.ind__row').forEach(function (row, i) {
     var fromX = i % 2 ? -30 : 0, toX = i % 2 ? 0 : -30;
     gsap.fromTo(row, { xPercent: fromX }, {
       xPercent: toX, ease: 'none',
@@ -386,10 +413,12 @@
   });
 
   // Process: line draws, steps light up
-  gsap.to('.steps__line span', {
-    scaleY: 1, ease: 'none',
-    scrollTrigger: { trigger: '.steps', start: 'top 62%', end: 'bottom 62%', scrub: true }
-  });
+  if ($('.steps')) {
+    gsap.to('.steps__line span', {
+      scaleY: 1, ease: 'none',
+      scrollTrigger: { trigger: '.steps', start: 'top 62%', end: 'bottom 62%', scrub: true }
+    });
+  }
   $$('.step').forEach(function (step) {
     ScrollTrigger.create({
       trigger: step, start: 'top 62%',
@@ -417,9 +446,11 @@
   function refresh() {
     if (window.PZChiller) window.PZChiller.fit();
     ScrollTrigger.refresh();
+    revealInView();
   }
   window.addEventListener('load', refresh);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(refresh);
+  requestAnimationFrame(revealInView);
 
   window.__pzReady = true;
 })();
