@@ -99,7 +99,7 @@ _October 2026 · first-pass research for the new prozone.am_
 5. Feedback round on the design direction
 6. Separate URLs per language (/hy/, /ru/) pre-rendered for SEO, with hreflang
 7. Vector (SVG) version of the logo from the original designer, if one exists
-8. Inner pages (Chillers, Services, Projects, Contact)
+8. ✅ Inner pages (Chillers, Services, Projects, Contact) + old-URL redirects (`_redirects`), sitemap.xml, robots.txt
 9. Real form backend (e.g. Formspree or a small serverless function) + spam protection
 10. Google Analytics 4 / Search Console, Google Business Profile, schema markup per page
 11. Hosting (Netlify / Vercel / Cloudflare Pages) and DNS switch from Ucraft
