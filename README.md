@@ -9,12 +9,12 @@ A fast static site (plain HTML/CSS/JS, no build step) that replaces the old Ucra
 | Page | What's on it |
 |---|---|
 | `index.html` | Homepage (sections below) |
-| `chillers.html` | Chiller types, 8 chiller services, the take-apart animation, service-visit checklist, warning signs, FAQ, chiller photos |
+| `chillers.html` | Chiller types, 8 chiller services, the take-apart animation, warning signs, FAQ, chiller photos |
 | `services.html` | Every system by category (cooling, heating, ventilation, controls) with a sticky category menu; each system has its own anchor (`#boilers`, `#ahu`…) and each category links to its own page |
-| `cooling.html` | Cooling systems, the take-apart **chiller**, pre-summer checklist |
-| `heating.html` | Heating systems, the take-apart **gas boiler**, pre-winter checklist |
-| `ventilation.html` | Ventilation systems, the take-apart **air handling unit**, service checklist |
-| `controls.html` | BMS and controls, the take-apart **BMS control cabinet**, service checklist |
+| `cooling.html` | Cooling systems and the take-apart **chiller** |
+| `heating.html` | Heating systems and the take-apart **gas boiler** |
+| `ventilation.html` | Ventilation systems and the take-apart **air handling unit** |
+| `controls.html` | BMS and controls and the take-apart **BMS control cabinet** |
 | `projects.html` | All 11 project photos with filters and a lightbox |
 | `contact.html` | Giant phone number, phone / WhatsApp / Viber / email cards, "have this ready when you call", call-back form |
 
@@ -29,7 +29,7 @@ Every inner page ends with a "talk to an engineer" call band and never shows pri
 | Brands | Marquee that speeds up as you scroll: Trane, Daikin, Carrier, York, Climaveneta, Aermec, Gree, General, Ferroli |
 | Services | Cooling · Heating · Ventilation · Controls cards with a two-tone hover fill and 3D tilt; each opens its category page |
 | Our work | Gallery of 11 real ProZone site photos, filters and a lightbox |
-| For companies | Maintenance contracts, seasonal start-up, 24/7 emergency service, retrofits. **No prices on the site**: a "Pricing after a call" banner sends people to the phone |
+| For companies | Planned maintenance, seasonal start-up, 24/7 emergency service. **No prices on the site**: a "Get in touch" banner sends people to the phone |
 | Industries | Kinetic type rows that move with scroll |
 | Process | Call → site visit → price by phone → installation/repair → ongoing service |
 | Contact | Giant click-to-call number, WhatsApp / Viber / Email, call-back form (opens the visitor's email app pre-filled) |
